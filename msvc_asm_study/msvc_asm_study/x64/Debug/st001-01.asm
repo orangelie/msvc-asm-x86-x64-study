@@ -126,9 +126,12 @@ PUBLIC	printf
 PUBLIC	main
 PUBLIC	__JustMyCode_Default
 PUBLIC	?_OptionsStorage@?1??__local_stdio_printf_options@@9@4_KA ; `__local_stdio_printf_options'::`2'::_OptionsStorage
-PUBLIC	??_C@_0M@LACCCNMM@hello?5world@			; `string'
+PUBLIC	??_C@_03PMGGPEJJ@?$CFd?6@			; `string'
+PUBLIC	??_C@_03OFAPEBGM@?$CFs?6@			; `string'
 EXTRN	__imp___acrt_iob_func:PROC
 EXTRN	__imp___stdio_common_vfprintf:PROC
+EXTRN	GetValue:PROC
+EXTRN	GetValue2:PROC
 EXTRN	_RTC_CheckStackVars:PROC
 EXTRN	_RTC_InitBase:PROC
 EXTRN	_RTC_Shutdown:PROC
@@ -185,7 +188,7 @@ pdata	ENDS
 ;	COMDAT pdata
 pdata	SEGMENT
 $pdata$main DD	imagerel $LN3
-	DD	imagerel $LN3+51
+	DD	imagerel $LN3+78
 	DD	imagerel $unwind$main
 pdata	ENDS
 ;	COMDAT rtc$TMZ
@@ -196,9 +199,13 @@ rtc$TMZ	ENDS
 rtc$IMZ	SEGMENT
 _RTC_InitBase.rtc$IMZ DQ FLAT:_RTC_InitBase
 rtc$IMZ	ENDS
-;	COMDAT ??_C@_0M@LACCCNMM@hello?5world@
+;	COMDAT ??_C@_03OFAPEBGM@?$CFs?6@
 CONST	SEGMENT
-??_C@_0M@LACCCNMM@hello?5world@ DB 'hello world', 00H	; `string'
+??_C@_03OFAPEBGM@?$CFs?6@ DB '%s', 0aH, 00H		; `string'
+CONST	ENDS
+;	COMDAT ??_C@_03PMGGPEJJ@?$CFd?6@
+CONST	SEGMENT
+??_C@_03PMGGPEJJ@?$CFd?6@ DB '%d', 0aH, 00H		; `string'
 CONST	ENDS
 ;	COMDAT xdata
 xdata	SEGMENT
@@ -296,7 +303,7 @@ _TEXT	ENDS
 _TEXT	SEGMENT
 main	PROC						; COMDAT
 
-; 4    : {
+; 7    : {
 
 $LN3:
 	push	rbp
@@ -306,12 +313,33 @@ $LN3:
 	lea	rcx, OFFSET FLAT:__5439621F_st001-01@cpp
 	call	__CheckForDebuggerJustMyCode
 
-; 5    : 	printf("hello world");
+; 8    : 	/*
+; 9    : 	__asm
+; 10   : 	{
+; 11   : 		mov rax, 0
+; 12   : 		mov rcx, dword ptr[hi]
+; 13   : 		sub rsp, 8
+; 14   : 		push rcx
+; 15   : 		call printf
+; 16   : 		add rsp, 8
+; 17   : 	}
+; 18   : 	*/
+; 19   : 
+; 20   : 	printf("%d\n", GetValue());
 
-	lea	rcx, OFFSET FLAT:??_C@_0M@LACCCNMM@hello?5world@
+	call	GetValue
+	mov	edx, eax
+	lea	rcx, OFFSET FLAT:??_C@_03PMGGPEJJ@?$CFd?6@
 	call	printf
 
-; 6    : }
+; 21   : 	printf("%s\n", GetValue2());
+
+	call	GetValue2
+	mov	rdx, rax
+	lea	rcx, OFFSET FLAT:??_C@_03OFAPEBGM@?$CFs?6@
+	call	printf
+
+; 22   : }
 
 	xor	eax, eax
 	lea	rsp, QWORD PTR [rbp+200]

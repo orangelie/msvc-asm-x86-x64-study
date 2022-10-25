@@ -1,15 +1,22 @@
 #include <iostream>
 
-const char* hi = "hello world";
+extern "C" int GetValue();
+extern "C" const char* GetValue2();
 
 int main()
 {
+	/*
 	__asm
 	{
-		mov eax, 0
-		mov ecx, dword ptr[hi]
-		push ecx
+		mov rax, 0
+		mov rcx, dword ptr[hi]
+		sub rsp, 8
+		push rcx
 		call printf
-		add esp, 4
+		add rsp, 8
 	}
+	*/
+
+	printf("%d\n", GetValue());
+	printf("%s\n", GetValue2());
 }

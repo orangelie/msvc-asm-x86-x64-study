@@ -15,4 +15,9 @@
       <Filter>cpp</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="test.asm">
+      <Filter>asm</Filter>
+    </MASM>
+  </ItemGroup>
 </Project>
